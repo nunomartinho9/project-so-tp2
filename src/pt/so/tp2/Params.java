@@ -40,7 +40,7 @@ public class Params {
 
     @Override
     public String toString() {
-        return "pt.so.tp2.Params{" +
+        return "{" +
                 "m=" + m +
                 ", maxLenght=" + maxLenght +
                 ", lenghts=" + Arrays.toString(lenghts) +

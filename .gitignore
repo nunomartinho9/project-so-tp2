@@ -1,0 +1,17 @@
+**/target/
+/target/
+*/target/*
+.classpath
+.project
+.settings
+
+# out folder #
+out
+
+# Package Files #
+*.jar
+*.war
+*.ear
+
+*.iml
+*.idea

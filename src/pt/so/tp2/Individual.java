@@ -112,10 +112,21 @@ public class Individual {
 
         p1 = rng.nextInt(max);              //Gera p1 com uma placa randomizada dentre as posiçoes possiveis do vetor
         p2 = chooseSlab(r, probs);          //Gera p2 com a funçao
+
         while(p2==p1){
             r = rng.nextFloat();
             p2 = chooseSlab(r, probs);     //Enquanto p2 for igual a p1
         }
+
+        if (p2 == 0) {
+            p2 = rng.nextInt(endOfPattern.get(p2)+1);
+        }
+        else {
+            int low = endOfPattern.get(p2-1)+1;
+            int high = endOfPattern.get(p2);
+            p2 = rng.nextInt(high-low)+low;
+        }
+
         r = rng.nextFloat();                //Dá reroll do r
         p3 = chooseSlab(r, probs);         //Gera p3 com a funçao e com o novo r
         while(p3==p1 || p3==p2){
@@ -123,12 +134,30 @@ public class Individual {
             p3 = chooseSlab(r, probs);     //Enquanto p3 for igual a p2 ou p1
         }
 
+        if (p3 == 0) {
+            p3 = rng.nextInt(endOfPattern.get(p3)+1);
+        }
+        else {
+            int low = endOfPattern.get(p3-1)+1;
+            int high = endOfPattern.get(p3);
+            p3 = rng.nextInt(high-low)+low;
+        }
+
+        swap3(p1, p2, p3);
+
         //Testes
         ArrayList<Integer> m3PS = new ArrayList<>();
         m3PS.add(p1);
         m3PS.add(p2);
         m3PS.add(p3);
         System.out.println("3PS: " + m3PS);
+    }
+
+    private void swap3 (int p1, int p2, int p3) {
+        int aux = vector.get(p1);
+        vector.set(p1, vector.get(p2));
+        vector.set(p2, vector.get(p3));
+        vector.set(p3, aux);
     }
 
     @Override

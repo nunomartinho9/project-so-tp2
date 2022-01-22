@@ -112,14 +112,31 @@ public class Individual {
 
         p1 = rng.nextInt(max);              //Gera p1 com uma placa randomizada dentre as posiçoes possiveis do vetor
         p2 = chooseSlab(r, probs);          //Gera p2 com a funçao
+
         while(p2==p1){
             p2 = chooseSlab(r, probs);     //Enquanto p2 for igual a p1
         }
+
+
+        if (p2 == 0) {
+            p2 = rng.nextInt(endOfPattern.get(p2)+1);
+        }
+        else {
+            p2 = rng.nextInt((endOfPattern.get(p2-1)+1)-endOfPattern.get(p2))+(endOfPattern.get(p2-1)+1);
+        }
+
         r = rng.nextFloat();                //Dá reroll do r
         p3 = chooseSlab(r, probs);         //Gera p3 com a funçao e com o novo r
         while(p3==p1 || p3==p2){
             p3 = chooseSlab(r, probs);     //Enquanto p3 for igual a p2 ou p1
             System.out.println("im stuck p3");
+        }
+
+        if (p3 == 0) {
+            p3 = rng.nextInt(endOfPattern.get(p3)+1);
+        }
+        else {
+            p3 = rng.nextInt((endOfPattern.get(p3-1)+1)-endOfPattern.get(p3))+(endOfPattern.get(p3-1)+1);
         }
 
         //Testes

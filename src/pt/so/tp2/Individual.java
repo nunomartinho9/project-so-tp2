@@ -89,7 +89,7 @@ public class Individual {
     //Funcao que implementa a Mutaçao 3ps
     public void mutate(){
         Random rng = new Random();
-        int max = waste.size();
+        int max = vector.size();
         int p1, p2, p3;
         float sumBottom = 0;
         float r = rng.nextFloat();
@@ -114,6 +114,7 @@ public class Individual {
         p2 = chooseSlab(r, probs);          //Gera p2 com a funçao
 
         while(p2==p1){
+            r = rng.nextFloat();
             p2 = chooseSlab(r, probs);     //Enquanto p2 for igual a p1
         }
 
@@ -128,8 +129,8 @@ public class Individual {
         r = rng.nextFloat();                //Dá reroll do r
         p3 = chooseSlab(r, probs);         //Gera p3 com a funçao e com o novo r
         while(p3==p1 || p3==p2){
+            r = rng.nextFloat();
             p3 = chooseSlab(r, probs);     //Enquanto p3 for igual a p2 ou p1
-            System.out.println("im stuck p3");
         }
 
         if (p3 == 0) {
@@ -140,11 +141,11 @@ public class Individual {
         }
 
         //Testes
-        ArrayList<Integer> pila = new ArrayList<>();
-        pila.add(p1);
-        pila.add(p2);
-        pila.add(p3);
-        System.out.println("Pila: " + pila);
+        ArrayList<Integer> m3PS = new ArrayList<>();
+        m3PS.add(p1);
+        m3PS.add(p2);
+        m3PS.add(p3);
+        System.out.println("3PS: " + m3PS);
     }
 
     @Override

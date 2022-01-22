@@ -18,7 +18,7 @@ public class Individual {
         //fillSolutionVector();
         calcWaste(p);
         cost = calcCost();
-        //mutate();
+        mutate();
     }
 
     private void fillVector(Integer...i){
@@ -75,10 +75,10 @@ public class Individual {
     public float calcCost() { return 1/((float)waste.size()+1)*(calcCostSum1()+ calcCostSum2()); }
 
     //Funcao para escolher a placa baseado na probabilidade
-    private int chooseP(float r, LinkedList<Float>probs){
+    private int chooseSlab(float r, LinkedList<Float> probs){
         float probA = 0;
         for(int i = 0; i<probs.size();i++){
-            if(r <= probA+probs.get(i) && r > probA){
+            if(r > probA && r <= probA+probs.get(i) ){
                 return i;
             }
             probA += probs.get(i);
@@ -91,18 +91,18 @@ public class Individual {
         Random rng = new Random();
         int max = waste.size();
         int p1, p2, p3;
-        float sumDeBaixo = 0;
+        float sumBottom = 0;
         float r = rng.nextFloat();
         LinkedList<Float> probs = new LinkedList<>();
 
         for (Integer i : waste) {
-            if(i!=0)sumDeBaixo += Math.sqrt(1/i.floatValue());
+            if(i!=0)sumBottom += Math.sqrt(1/i.floatValue());
         }
 
         for(Integer w : waste){
             float prob;
             if(w!=0){
-                prob = ((float) Math.sqrt(1/w.floatValue()))/sumDeBaixo;
+                prob = ((float) Math.sqrt(1/w.floatValue()))/sumBottom;
                 probs.add(prob);
             }
             else{
@@ -110,15 +110,16 @@ public class Individual {
             }
         }
 
-        p1 = rng.nextInt(max);          //Gera p1 com uma placa randomizada
-        p2 = chooseP(r, probs);         //Gera p2 com a funçao
+        p1 = rng.nextInt(max);              //Gera p1 com uma placa randomizada dentre as posiçoes possiveis do vetor
+        p2 = chooseSlab(r, probs);          //Gera p2 com a funçao
         while(p2==p1){
-            p2 = chooseP(r, probs);     //Enquanto p2 for igual a p1
+            p2 = chooseSlab(r, probs);     //Enquanto p2 for igual a p1
         }
-        r = rng.nextFloat();            //Dá reroll do r
-        p3 = chooseP(r, probs);         //Gera p3 com a funçao e com o novo r
+        r = rng.nextFloat();                //Dá reroll do r
+        p3 = chooseSlab(r, probs);         //Gera p3 com a funçao e com o novo r
         while(p3==p1 || p3==p2){
-            p3 = chooseP(r, probs);     //Enquanto p3 for igual a p2 ou p1
+            p3 = chooseSlab(r, probs);     //Enquanto p3 for igual a p2 ou p1
+            System.out.println("im stuck p3");
         }
 
         //Testes

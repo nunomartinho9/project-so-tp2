@@ -118,12 +118,13 @@ public class Individual {
             p2 = chooseSlab(r, probs);     //Enquanto p2 for igual a p1
         }
 
-
         if (p2 == 0) {
             p2 = rng.nextInt(endOfPattern.get(p2)+1);
         }
         else {
-            p2 = rng.nextInt((endOfPattern.get(p2-1)+1)-endOfPattern.get(p2))+(endOfPattern.get(p2-1)+1);
+            int low = endOfPattern.get(p2-1)+1;
+            int high = endOfPattern.get(p2);
+            p2 = rng.nextInt(high-low)+low;
         }
 
         r = rng.nextFloat();                //Dá reroll do r
@@ -137,8 +138,12 @@ public class Individual {
             p3 = rng.nextInt(endOfPattern.get(p3)+1);
         }
         else {
-            p3 = rng.nextInt((endOfPattern.get(p3-1)+1)-endOfPattern.get(p3))+(endOfPattern.get(p3-1)+1);
+            int low = endOfPattern.get(p3-1)+1;
+            int high = endOfPattern.get(p3);
+            p3 = rng.nextInt(high-low)+low;
         }
+
+        swap3(p1, p2, p3);
 
         //Testes
         ArrayList<Integer> m3PS = new ArrayList<>();
@@ -146,6 +151,13 @@ public class Individual {
         m3PS.add(p2);
         m3PS.add(p3);
         System.out.println("3PS: " + m3PS);
+    }
+
+    private void swap3 (int p1, int p2, int p3) {
+        int aux = vector.get(p1);
+        vector.set(p1, vector.get(p2));
+        vector.set(p2, vector.get(p3));
+        vector.set(p3, aux);
     }
 
     @Override

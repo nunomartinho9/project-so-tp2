@@ -17,8 +17,18 @@ public class Individual {
         fillVector(5,4,6,3,3,4,6,6);
         //fillSolutionVector();
         calcWaste(p);
-        cost = calcCost();
+        calcCost();
         mutate();
+    }
+
+    public Individual(Params p, List<Integer> vector){
+        this.vector = vector;
+        waste = new LinkedList<>();
+        hasWasteList = new LinkedList<>();
+        endOfPattern = new LinkedList<>();
+        this.p = p;
+        calcWaste(p);
+        calcCost();
     }
 
     private void fillVector(Integer...i){
@@ -72,7 +82,7 @@ public class Individual {
         return sum;
     }
 
-    public float calcCost() { return 1/((float)waste.size()+1)*(calcCostSum1()+ calcCostSum2()); }
+    public void calcCost() { this.cost = 1/((float)waste.size()+1)*(calcCostSum1()+ calcCostSum2()); }
 
     //Funcao para escolher a placa baseado na probabilidade
     private int chooseSlab(float r, LinkedList<Float> probs){
@@ -83,20 +93,64 @@ public class Individual {
             }
             probA += probs.get(i);
         }
-        return probs.size();
+        return probs.size()-1;
     }
 
     //Funcao que implementa a Mutaçao 3ps
-    public void mutate(){
+    public Individual mutate(){
+        LinkedList<Float> probs = calcProbs();
+        LinkedList<Integer> positions = genPositions(probs);
+        return new Individual(p, swap3(positions.get(0), positions.get(1), positions.get(2)));
+    }
+
+    private LinkedList<Integer> genPositions(LinkedList<Float> probs) {
         Random rng = new Random();
-        int max = vector.size();
-        int p1, p2, p3;
-        float sumBottom = 0;
         float r = rng.nextFloat();
+        int p1, p2, p3;
+        LinkedList<Integer> newPos = new LinkedList<>();
+        p1 = rng.nextInt(vector.size());
+        p2 = chooseSlab(r, probs);          //Gera p2 com a funçao
+
+        while(p2==p1){
+            r = rng.nextFloat();
+            p2 = chooseSlab(r, probs);     //Enquanto p2 for igual a p1
+        }
+        p2 = genPosition(rng, p2);
+
+        r = rng.nextFloat();                //Dá reroll do r
+        p3 = chooseSlab(r, probs);         //Gera p3 com a funçao e com o novo r
+        while(p3==p1 || p3==p2){
+            r = rng.nextFloat();
+            p3 = chooseSlab(r, probs);     //Enquanto p3 for igual a p2 ou p1
+        }
+        p3 = genPosition(rng, p3);
+        newPos.add(p1);
+        newPos.add(p2);
+        newPos.add(p3);
+        return newPos;
+    }
+
+    private int genPosition(Random rng, int pos) {
+        if (pos == 0) {
+            int a = endOfPattern.get(pos)+1;
+            return rng.nextInt(endOfPattern.get(pos)+1);
+
+        }
+        else {
+            int low = endOfPattern.get(pos-1)+1;
+            int high = endOfPattern.get(pos);
+            if (high == low) return high;
+            return rng.nextInt(high-low)+low;
+        }
+    }
+
+    private LinkedList<Float> calcProbs() {
+        float sumBottom = 0;
         LinkedList<Float> probs = new LinkedList<>();
 
+        //calc probs
         for (Integer i : waste) {
-            if(i!=0)sumBottom += Math.sqrt(1/i.floatValue());
+            if(i!=0) sumBottom += Math.sqrt(1/i.floatValue());
         }
 
         for(Integer w : waste){
@@ -108,56 +162,19 @@ public class Individual {
             else{
                 probs.add((float) 0);
             }
-        }
 
-        p1 = rng.nextInt(max);              //Gera p1 com uma placa randomizada dentre as posiçoes possiveis do vetor
-        p2 = chooseSlab(r, probs);          //Gera p2 com a funçao
-
-        while(p2==p1){
-            r = rng.nextFloat();
-            p2 = chooseSlab(r, probs);     //Enquanto p2 for igual a p1
         }
-
-        if (p2 == 0) {
-            p2 = rng.nextInt(endOfPattern.get(p2)+1);
-        }
-        else {
-            int low = endOfPattern.get(p2-1)+1;
-            int high = endOfPattern.get(p2);
-            p2 = rng.nextInt(high-low)+low;
-        }
-
-        r = rng.nextFloat();                //Dá reroll do r
-        p3 = chooseSlab(r, probs);         //Gera p3 com a funçao e com o novo r
-        while(p3==p1 || p3==p2){
-            r = rng.nextFloat();
-            p3 = chooseSlab(r, probs);     //Enquanto p3 for igual a p2 ou p1
-        }
-
-        if (p3 == 0) {
-            p3 = rng.nextInt(endOfPattern.get(p3)+1);
-        }
-        else {
-            int low = endOfPattern.get(p3-1)+1;
-            int high = endOfPattern.get(p3);
-            p3 = rng.nextInt(high-low)+low;
-        }
-
-        swap3(p1, p2, p3);
-
-        //Testes
-        ArrayList<Integer> m3PS = new ArrayList<>();
-        m3PS.add(p1);
-        m3PS.add(p2);
-        m3PS.add(p3);
-        System.out.println("3PS: " + m3PS);
+        return probs;
     }
 
-    private void swap3 (int p1, int p2, int p3) {
-        int aux = vector.get(p1);
-        vector.set(p1, vector.get(p2));
-        vector.set(p2, vector.get(p3));
-        vector.set(p3, aux);
+    private List<Integer> swap3 (int p1, int p2, int p3) {
+        List<Integer> m = new LinkedList<>(vector);
+        int aux = m.get(p1);
+        m.set(p1, m.get(p2));
+        m.set(p2, m.get(p3));
+        m.set(p3, aux);
+        System.out.println("new vetor: "+m);
+        return m;
     }
 
     @Override

@@ -1,5 +1,6 @@
 package pt.so.tp2;
 
+import java.util.LinkedList;
 import java.util.List;
 
 public class Population {
@@ -7,15 +8,22 @@ public class Population {
     List<Individual> individualList;
     private final int size;
 
-    public Population(Params params, List<Individual> individuals, int sizeOfPop) {
+    public Population(Params params, int sizeOfPop) {
         this.size = sizeOfPop;
-        this.individualList = individuals;
+        this.individualList = new LinkedList<>();
         this.par = params;
+        generateIndividualList();
+    }
+
+    public void generateIndividualList() {
+        for (int i = 0; i<size; i++) {
+            this.individualList.add(new Individual(par));
+        }
     }
 
     public void mutation() {
         for (Individual individual : individualList) {
-            individual.mutate();
+            this.individualList.add(individual.mutate().mutate());
         }
     }
 

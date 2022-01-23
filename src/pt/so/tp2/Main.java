@@ -29,7 +29,7 @@ public class Main {
         public void run() {
             int iter = 0;
             float StartTime = System.currentTimeMillis();
-            System.out.println(this.getName());
+            //System.out.println(this.getName());
             Population pop = new Population(p, sizeOfPop);
 
             while (System.currentTimeMillis() - StartTime < seconds * 1000.0) {
@@ -40,6 +40,7 @@ public class Main {
 
                 for (int i = 0; i < pop.individualList.size(); i++) {
                     Individual ind = pop.individualList.get(i);
+                    //System.out.println(ind);
                     if (ind.isBestIndividual(pop.bestIndividual)) {
                         pop.updateBestIndividual(ind);
                         bestIter = iter;

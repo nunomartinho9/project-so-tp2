@@ -5,7 +5,7 @@ import java.util.*;
 public class Individual implements Comparable<Individual> {
     Params p;
     int ganhos;
-    List<Integer> vector, waste, hasWasteList, endOfPattern;
+    List<Integer> vector, waste, hasWasteList, endOfPattern, sol;
     float cost;
     int eval;
 
@@ -15,12 +15,15 @@ public class Individual implements Comparable<Individual> {
         waste = new LinkedList<>();
         hasWasteList = new LinkedList<>();
         endOfPattern = new LinkedList<>();
+        sol = new LinkedList<>();
+
 
         this.p = p;
         //fillVector(5,4,6,3,3,4,6,6);
         fillSolutionVector();
         calcWaste(p);
         calcCost();
+        createSol();
         //mutate();
         eval = waste.size()+wasteTotal();
     }
@@ -48,6 +51,17 @@ public class Individual implements Comparable<Individual> {
             wasteTotal += i;
         }
         return wasteTotal;
+    }
+
+    public void createSol(){
+        int count=0;
+        for(int i : hasWasteList){
+            if(i!=0){count++;}
+        }
+        sol.add(waste.size());
+        sol.add(wasteTotal());
+        sol.add(count);
+        System.out.println("sol: " + sol);
     }
 
     private void fillSolutionVector(){

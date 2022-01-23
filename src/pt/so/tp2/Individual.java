@@ -130,8 +130,8 @@ public class Individual implements Comparable<Individual> {
         while(p2==p1){
             r = rng.nextFloat();
             p2 = chooseSlab(r, probs);     //Enquanto p2 for igual a p1
+            p2 = genPosition(rng, p2);
         }
-        p2 = genPosition(rng, p2);
 
         r = rng.nextFloat();                //Dá reroll do r
         p3 = chooseSlab(r, probs);         //Gera p3 com a funçao e com o novo r

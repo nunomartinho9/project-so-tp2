@@ -44,6 +44,7 @@ public class Individual implements Comparable<Individual> {
             }
         }
         Collections.shuffle(vector);
+
     }
 
     public void calcWaste(Params p){

@@ -19,7 +19,6 @@ public class Population {
     public void generateIndividualList() {
         for (int i = 0; i<size; i++) {
             this.individualList.add(new Individual(par));
-
         }
     }
 

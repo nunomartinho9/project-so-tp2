@@ -1,5 +1,6 @@
 package pt.so.tp2;
 
+import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
@@ -44,13 +45,13 @@ public class Population {
         }
     }
 
-    public void evaluate() {
-        for (Individual individual : individualList) {
-            individual.calcCost();
+
+    public void selectBest() {
+        individualList.sort(Comparator.naturalOrder());
+        if (size * 2 > size) {
+            individualList.subList(size, size * 2).clear();
         }
+        System.out.println(individualList.size());
     }
-
-    public void selectBest() {}
-
 
 }

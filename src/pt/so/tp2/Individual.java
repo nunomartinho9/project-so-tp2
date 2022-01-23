@@ -2,7 +2,7 @@ package pt.so.tp2;
 
 import java.util.*;
 
-public class Individual {
+public class Individual implements Comparable<Individual> {
     Params p;
     int ganhos;
     List<Integer> vector, waste, hasWasteList, endOfPattern;
@@ -175,7 +175,7 @@ public class Individual {
         m.set(p1, m.get(p2));
         m.set(p2, m.get(p3));
         m.set(p3, aux);
-        System.out.println("new vetor: "+m);
+       // System.out.println("new vetor: "+m);
         return m;
     }
 
@@ -189,5 +189,10 @@ public class Individual {
                 ", endOfPattenr=" + endOfPattern +
                 ", cost=" + cost +
                 '}';
+    }
+
+    @Override
+    public int compareTo(Individual o) {
+        return Integer.compare(o.ganhos, this.ganhos);
     }
 }

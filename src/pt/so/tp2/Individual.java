@@ -4,18 +4,20 @@ import java.util.*;
 
 public class Individual {
     Params p;
-
+    int ganhos;
     List<Integer> vector, waste, hasWasteList, endOfPattern;
     float cost;
 
     public Individual(Params p){
+        ganhos = 0;
         vector = new LinkedList<>();
         waste = new LinkedList<>();
         hasWasteList = new LinkedList<>();
         endOfPattern = new LinkedList<>();
+
         this.p = p;
-        fillVector(5,4,6,3,3,4,6,6);
-        //fillSolutionVector();
+        //fillVector(5,4,6,3,3,4,6,6);
+        fillSolutionVector();
         calcWaste(p);
         calcCost();
         mutate();
@@ -37,7 +39,7 @@ public class Individual {
 
     private void fillSolutionVector(){
         for (int i = 0; i<p.m; i++){
-            for (int j = 0; j<p.lenghts[i]; j++){
+            for (int j = 0; j<p.limits[i]; j++){
                 vector.add(p.lenghts[i]);
             }
         }

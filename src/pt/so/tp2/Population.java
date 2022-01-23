@@ -2,6 +2,7 @@ package pt.so.tp2;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
 
 public class Population {
     Params par;
@@ -12,12 +13,12 @@ public class Population {
         this.size = sizeOfPop;
         this.individualList = new LinkedList<>();
         this.par = params;
-        generateIndividualList();
     }
 
     public void generateIndividualList() {
         for (int i = 0; i<size; i++) {
             this.individualList.add(new Individual(par));
+
         }
     }
 
@@ -27,7 +28,20 @@ public class Population {
         }
     }
 
-    public void comparasion() {}
+    public void comparasion(){
+        Random rng = new Random();
+        int i;
+        for (Individual individual : individualList) {
+            for(int q=0;q<10; q++){
+                i = rng.nextInt(individualList.size());
+                if(individual.cost > individualList.get(i).cost){
+                    individualList.get(i).ganhos++;
+                }else if(individual.cost < individualList.get(i).cost){
+                    individual.ganhos++;
+                }
+            }
+        }
+    }
 
     public void evaluate() {
         for (Individual individual : individualList) {
@@ -37,4 +51,9 @@ public class Population {
 
     public void selectBest() {}
 
+    public void getGanhos(){
+        for(int i= 0; i< individualList.size(); i++){
+            System.out.println(individualList.get(i).ganhos +""+ "    "+individualList.get(i).vector);
+        }
+    }
 }

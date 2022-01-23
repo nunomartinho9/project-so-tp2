@@ -23,8 +23,9 @@ public class Population {
     }
 
     public void mutation() {
-        for (Individual individual : individualList) {
-            this.individualList.add(individual.mutate().mutate());
+        int size=individualList.size();
+        for (int i =0; i<size; i++) {
+            this.individualList.add(individualList.get(i).mutate().mutate());
         }
     }
 
@@ -51,9 +52,5 @@ public class Population {
 
     public void selectBest() {}
 
-    public void getGanhos(){
-        for(int i= 0; i< individualList.size(); i++){
-            System.out.println(individualList.get(i).ganhos +""+ "    "+individualList.get(i).vector);
-        }
-    }
+
 }

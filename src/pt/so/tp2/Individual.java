@@ -20,7 +20,7 @@ public class Individual {
         fillSolutionVector();
         calcWaste(p);
         calcCost();
-        mutate();
+        //mutate();
     }
 
     public Individual(Params p, List<Integer> vector){

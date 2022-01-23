@@ -8,6 +8,7 @@ import java.util.Random;
 public class Population {
     Params par;
     List<Individual> individualList;
+
     private final int size;
 
     public Population(Params params, int sizeOfPop) {
@@ -49,6 +50,6 @@ public class Population {
         if (size * 2 > size) {
             individualList.subList(size, size * 2).clear();
         }
-        System.out.println(individualList.size());
+        //System.out.println(individualList.size());
     }
 }

@@ -44,7 +44,6 @@ public class Population {
         }
     }
 
-
     public void selectBest() {
         individualList.sort(Comparator.naturalOrder());
         if (size * 2 > size) {
@@ -52,5 +51,4 @@ public class Population {
         }
         System.out.println(individualList.size());
     }
-
 }

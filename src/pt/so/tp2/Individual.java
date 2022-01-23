@@ -7,6 +7,7 @@ public class Individual implements Comparable<Individual> {
     int ganhos;
     List<Integer> vector, waste, hasWasteList, endOfPattern;
     float cost;
+    int eval;
 
     public Individual(Params p){
         ganhos = 0;
@@ -21,6 +22,7 @@ public class Individual implements Comparable<Individual> {
         calcWaste(p);
         calcCost();
         //mutate();
+        eval = waste.size()+wasteTotal();
     }
 
     public Individual(Params p, List<Integer> vector){
@@ -28,13 +30,23 @@ public class Individual implements Comparable<Individual> {
         waste = new LinkedList<>();
         hasWasteList = new LinkedList<>();
         endOfPattern = new LinkedList<>();
+        eval = 0;
         this.p = p;
         calcWaste(p);
         calcCost();
+        eval = waste.size()+wasteTotal();
     }
 
     private void fillVector(Integer...i){
         vector.addAll(Arrays.asList(i));
+    }
+
+    public int wasteTotal(){
+        int wasteTotal = 0;
+        for(int i : waste){
+            wasteTotal += i;
+        }
+        return wasteTotal;
     }
 
     private void fillSolutionVector(){
@@ -176,8 +188,18 @@ public class Individual implements Comparable<Individual> {
         m.set(p1, m.get(p2));
         m.set(p2, m.get(p3));
         m.set(p3, aux);
-       // System.out.println("new vetor: "+m);
+       // System.out.println("new vector: "+m);
         return m;
+    }
+
+    public Individual getBestIndividual(Individual a, Individual b){
+        if(a.eval<b.eval){return a;}
+        return b;
+    }
+
+    @Override
+    public int compareTo(Individual o) {
+        return Integer.compare(o.ganhos, this.ganhos);
     }
 
     @Override
@@ -187,13 +209,9 @@ public class Individual implements Comparable<Individual> {
                 ", vector=" + vector +
                 ", waste=" + waste +
                 ", hasWaste=" + hasWasteList +
-                ", endOfPattenr=" + endOfPattern +
+                ", eval=" + eval +
+                ", endOfPattern=" + endOfPattern +
                 ", cost=" + cost +
                 '}';
-    }
-
-    @Override
-    public int compareTo(Individual o) {
-        return Integer.compare(o.ganhos, this.ganhos);
     }
 }

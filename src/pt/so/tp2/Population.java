@@ -8,6 +8,7 @@ import java.util.Random;
 public class Population {
     Params par;
     List<Individual> individualList;
+    Individual bestIndividual;
 
     private final int size;
 
@@ -15,6 +16,7 @@ public class Population {
         this.size = sizeOfPop;
         this.individualList = new LinkedList<>();
         this.par = params;
+        this.bestIndividual = new Individual(params);
     }
 
     public void generateIndividualList() {
@@ -43,6 +45,10 @@ public class Population {
                 }
             }
         }
+    }
+
+    public void updateBestIndividual(Individual a){
+        this.bestIndividual=a;
     }
 
     public void selectBest() {

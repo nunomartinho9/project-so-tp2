@@ -30,10 +30,11 @@ public class Individual implements Comparable<Individual> {
         waste = new LinkedList<>();
         hasWasteList = new LinkedList<>();
         endOfPattern = new LinkedList<>();
-        eval = 0;
         this.p = p;
         calcWaste(p);
         calcCost();
+        //System.out.println("size: " + waste.size());
+        //System.out.println("totalWaste: " + wasteTotal());
         eval = waste.size()+wasteTotal();
     }
 
@@ -192,9 +193,8 @@ public class Individual implements Comparable<Individual> {
         return m;
     }
 
-    public Individual getBestIndividual(Individual a, Individual b){
-        if(a.eval<b.eval){return a;}
-        return b;
+    public boolean isBestIndividual(Individual a){
+        return this.eval < a.eval;
     }
 
     @Override

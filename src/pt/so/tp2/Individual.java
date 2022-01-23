@@ -172,11 +172,11 @@ public class Individual implements Comparable<Individual> {
 
     private List<Integer> swap3 (int p1, int p2, int p3) {
         List<Integer> m = new LinkedList<>(vector);
+        //System.out.println("P1: " +p1 + " P2: " + p2 + " P3: " + p3);
         int aux = m.get(p1);
         m.set(p1, m.get(p2));
         m.set(p2, m.get(p3));
         m.set(p3, aux);
-       // System.out.println("new vetor: "+m);
         return m;
     }
 

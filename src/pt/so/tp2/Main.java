@@ -1,31 +1,11 @@
 package pt.so.tp2;
 
 
-import static pt.so.tp2.Writer.storage;
+import java.util.concurrent.Semaphore;
+
 
 public class Main {
     static Storage storage;
-
-    static class Storage {
-        Individual ind;
-        float time;
-        int iteration;
-
-        public Storage(Individual ind) {
-            this.ind = ind;
-            this.time = 0;
-            this.iteration = 0;
-        }
-
-        public synchronized void set(Individual ind, float time, int iteration) {
-            if (!this.ind.isBestIndividual(ind)) {
-                this.ind = ind;
-                this.time = time;
-                this.iteration = iteration;
-            }
-        }
-    }
-
     private static class MyThreads extends Thread {
         Storage storage;
         Params p;
@@ -33,14 +13,16 @@ public class Main {
         int seconds;
         int bestIter;
         float bestTime;
+        Semaphore sem;
 
-        public MyThreads(int seconds, Storage storage, Params p, int sizeOfPop) {
+        public MyThreads(int seconds, Storage storage, Params p, int sizeOfPop, Semaphore sem) {
             this.storage = storage;
             this.p = p;
             this.sizeOfPop = sizeOfPop;
             this.seconds = seconds;
             this.bestIter = 0;
             this.bestTime = 0;
+            this.sem = sem;
         }
 
         @Override
@@ -67,22 +49,34 @@ public class Main {
                 }
                 iter++;
             }
+            try {
+                sem.acquire();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             storage.set(pop.bestIndividual, this.bestTime, this.bestIter);
-
+            sem.release();
         }
     }
 
 
         public static void main(String[] args) {
+            float StartTime = System.currentTimeMillis();
             String filename = args[1];
             int threads = Integer.parseInt(args[2]);
             int seconds = Integer.parseInt(args[3]);
             Params p = Params.readFile("pcu_tests/" + filename + ".txt");
             storage = new Storage(new Individual(p));
+            Semaphore sem = new Semaphore(1);
 
             for (int i = 0; i < threads; i++) {
-                new MyThreads(seconds, storage, p, 2).start();
+                new MyThreads(seconds, storage, p, 2, sem).start();
             }
 
-        }
+            while (System.currentTimeMillis() - StartTime < seconds * 1000.0) {
+
+            }
+            System.out.println(storage);
+
+    }
 }
